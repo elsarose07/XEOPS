@@ -4,16 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  LOGO_SPOKE_BOTTOM_LEFT,
-  LOGO_SPOKE_TOP_RIGHT,
-} from "@/components/brand/xeops-paths";
 import { NAV_LINKS } from "@/components/xeops/xeops-data";
 import { useXeopsModals } from "@/components/xeops/XeopsContext";
 import {
   IconArrowRight,
   IconClose,
   IconMenu,
+  XeopsMark,
 } from "@/components/xeops/XeopsIcons";
 
 export function XeopsHeader() {
@@ -39,14 +36,7 @@ export function XeopsHeader() {
           className="flex items-center gap-2.5 text-[#F2F3F3] transition-opacity hover:opacity-90"
           aria-label="Xeops Home"
         >
-          <svg
-            viewBox="137 157 685 322"
-            className="h-5 w-auto"
-            aria-hidden="true"
-          >
-            <path d={LOGO_SPOKE_BOTTOM_LEFT.d} fill="#F2F3F3" />
-            <path d={LOGO_SPOKE_TOP_RIGHT.d} fill="#65D9D0" />
-          </svg>
+          <XeopsMark className="h-5 w-auto" />
           <span className="text-[17px] font-semibold tracking-tight text-[#F2F3F3]">
             Xeops
           </span>

@@ -1,6 +1,20 @@
 import type { SVGProps } from "react";
+import {
+  LOGO_SPOKE_BOTTOM_LEFT,
+  LOGO_SPOKE_TOP_RIGHT,
+} from "@/components/brand/xeops-paths";
 
 type IconProps = SVGProps<SVGSVGElement>;
+
+/** Monochrome pure-white XEOPS mark matching assets/logo.png */
+export function XeopsMark(props: IconProps) {
+  return (
+    <svg viewBox="137 157 685 322" aria-hidden="true" {...props}>
+      <path d={LOGO_SPOKE_BOTTOM_LEFT.d} fill="#FFFFFF" />
+      <path d={LOGO_SPOKE_TOP_RIGHT.d} fill="#FFFFFF" />
+    </svg>
+  );
+}
 
 export function IconBolt(props: IconProps) {
   return (

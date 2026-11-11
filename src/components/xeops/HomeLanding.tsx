@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { XEOPS_WORDMARK } from "@/components/brand/xeops-paths";
 import { HERO_PILLARS } from "@/components/xeops/xeops-data";
 import { useXeopsModals } from "@/components/xeops/XeopsContext";
 import { HeroSculpture } from "@/components/xeops/HeroSculpture";
@@ -43,18 +44,34 @@ export function HomeLanding() {
               Introducing Xeops
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold leading-[1.04] tracking-[-0.03em] text-[#F2F3F3] sm:text-6xl lg:text-[4.25rem]">
+            <svg
+              viewBox={XEOPS_WORDMARK.viewBox}
+              className="mt-5 h-auto w-[min(66vw,270px)] sm:w-[295px]"
+              role="img"
+              aria-label="XEOPS"
+            >
+              {XEOPS_WORDMARK.glyphs.map((glyph) => (
+                <path
+                  key={glyph.id}
+                  d={glyph.d}
+                  fill="#F2F3F3"
+                  fillRule="evenodd"
+                />
+              ))}
+            </svg>
+
+            <h1 className="mt-4 text-5xl font-bold leading-[1.04] tracking-[-0.03em] text-[#F2F3F3] sm:text-6xl lg:text-[4.15rem]">
               Dream. Build.
               <br />
               <span className="xeops-gradient-teal">Innovate.</span>
             </h1>
 
-            <p className="mt-6 max-w-md text-base leading-relaxed text-[#A3AAAA] sm:text-[17px]">
+            <p className="mt-5 max-w-md text-base leading-relaxed text-[#A3AAAA] sm:text-[17px]">
               A next-generation platform to turn your ideas into reality, faster
               than ever.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-7 flex flex-wrap items-center gap-4">
               <button
                 type="button"
                 onClick={() => openGetStarted("pro")}

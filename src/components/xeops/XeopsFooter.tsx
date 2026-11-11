@@ -1,10 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import {
-  LOGO_SPOKE_BOTTOM_LEFT,
-  LOGO_SPOKE_TOP_RIGHT,
-} from "@/components/brand/xeops-paths";
 import { NAV_LINKS } from "@/components/xeops/xeops-data";
 import { useXeopsModals } from "@/components/xeops/XeopsContext";
 import {
@@ -12,6 +8,7 @@ import {
   IconLinkedin,
   IconXSocial,
   IconYoutube,
+  XeopsMark,
 } from "@/components/xeops/XeopsIcons";
 
 const SOCIAL_LINKS = [
@@ -33,10 +30,7 @@ export function XeopsFooter() {
             href="/home"
             className="flex items-center gap-2.5 text-[#F2F3F3] transition-opacity hover:opacity-85"
           >
-            <svg viewBox="137 157 685 322" className="h-4 w-auto" aria-hidden="true">
-              <path d={LOGO_SPOKE_BOTTOM_LEFT.d} fill="#F2F3F3" />
-              <path d={LOGO_SPOKE_TOP_RIGHT.d} fill="#65D9D0" />
-            </svg>
+            <XeopsMark className="h-4 w-auto" />
             <span className="text-base font-semibold tracking-tight">Xeops</span>
           </Link>
 

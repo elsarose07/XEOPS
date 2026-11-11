@@ -2,14 +2,11 @@
 
 import { useState } from "react";
 import {
-  LOGO_SPOKE_BOTTOM_LEFT,
-  LOGO_SPOKE_TOP_RIGHT,
-} from "@/components/brand/xeops-paths";
-import {
   IconChart,
   IconFolder,
   IconHome,
   IconSettings,
+  XeopsMark,
 } from "@/components/xeops/XeopsIcons";
 
 type TabletTab = "dashboard" | "projects" | "analytics" | "settings";
@@ -61,10 +58,7 @@ export function ProductShowcaseTablet() {
           {/* Sidebar */}
           <aside className="col-span-4 border-r border-white/[0.07] bg-[#090B0B]/85 p-3.5 sm:col-span-4 sm:p-4">
             <div className="flex items-center gap-2 px-2 pb-5">
-              <svg viewBox="137 157 685 322" className="h-3.5 w-auto" aria-hidden="true">
-                <path d={LOGO_SPOKE_BOTTOM_LEFT.d} fill="#F2F3F3" />
-                <path d={LOGO_SPOKE_TOP_RIGHT.d} fill="#20C6C2" />
-              </svg>
+              <XeopsMark className="h-3.5 w-auto" />
               <span className="text-xs font-semibold tracking-tight text-[#F2F3F3]">
                 Xeops
               </span>
