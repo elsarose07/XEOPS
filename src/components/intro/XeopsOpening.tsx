@@ -95,7 +95,7 @@ export function XeopsOpening() {
         gsap.set(glyphs, { opacity: 1, y: 0 });
         const timer = window.setTimeout(() => {
           router.replace("/home");
-        }, 1000);
+        }, 550);
         return () => window.clearTimeout(timer);
       }
 
@@ -205,19 +205,19 @@ export function XeopsOpening() {
           },
           "brandUp"
         )
-        // 4. Hold branding for 1 full second, then smoothly fade to /home
+        // 4. Brief crisp hold, then smoothly fade to /home
         .to(
           wordmarkWrap,
           {
             opacity: 0,
             scale: 0.985,
-            duration: 0.7,
+            duration: 0.48,
             ease: "power2.inOut",
             onComplete: () => {
               router.replace("/home");
             },
           },
-          "+=1"
+          "+=0.45"
         );
 
       const handleResize = () => {
