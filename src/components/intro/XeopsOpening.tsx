@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
@@ -57,14 +58,12 @@ function computeOffscreenTargets(logoRect: DOMRect, vw: number, vh: number) {
 }
 
 export function XeopsOpening() {
+  const router = useRouter();
   const stageRef = useRef<HTMLDivElement>(null);
   const centerLogoRef = useRef<HTMLDivElement>(null);
   const spokeBlRef = useRef<HTMLDivElement>(null);
   const spokeTrRef = useRef<HTMLDivElement>(null);
   const wordmarkWrapRef = useRef<HTMLDivElement>(null);
-  const replayBtnRef = useRef<HTMLButtonElement>(null);
-
-  const [playCount, setPlayCount] = useState(0);
 
   useGSAP(
     () => {
@@ -72,7 +71,6 @@ export function XeopsOpening() {
       const spokeBl = spokeBlRef.current;
       const spokeTr = spokeTrRef.current;
       const wordmarkWrap = wordmarkWrapRef.current;
-      const replayBtn = replayBtnRef.current;
 
       if (!centerLogo || !spokeBl || !spokeTr || !wordmarkWrap) {
         return;
@@ -95,13 +93,20 @@ export function XeopsOpening() {
         gsap.set([spokeBl, spokeTr], { opacity: 0 });
         gsap.set(wordmarkWrap, { opacity: 1, scale: 1 });
         gsap.set(glyphs, { opacity: 1, y: 0 });
-        if (replayBtn) gsap.set(replayBtn, { opacity: 0.42 });
-        return;
+        const timer = window.setTimeout(() => {
+          router.replace("/home");
+        }, 1000);
+        return () => window.clearTimeout(timer);
       }
 
       const tl = gsap.timeline({
         defaults: { overwrite: "auto" },
       });
+
+      // Prefetch /home after router initialization so the cross-dissolve is instant
+      tl.call(() => {
+        router.prefetch("/home");
+      }, undefined, 0.8);
 
       // 1. Both spokes slice inward to form the centered logo on #000000
       tl.addLabel("logoIn", 0.12)
@@ -199,33 +204,26 @@ export function XeopsOpening() {
             ease: "power4.out",
           },
           "brandUp"
+        )
+        // 4. Hold branding for 1 full second, then smoothly fade to /home
+        .to(
+          wordmarkWrap,
+          {
+            opacity: 0,
+            scale: 0.985,
+            duration: 0.7,
+            ease: "power2.inOut",
+            onComplete: () => {
+              router.replace("/home");
+            },
+          },
+          "+=1"
         );
-
-      if (replayBtn) {
-        tl.fromTo(
-          replayBtn,
-          { opacity: 0, y: 6 },
-          { opacity: 0.42, y: 0, duration: 0.45, ease: "power2.out" },
-          "brandUp+=0.7"
-        );
-      }
 
       const handleResize = () => {
         if (tl.progress() < 1) {
           tl.invalidate();
-          return;
         }
-        const updated = getTargets();
-        gsap.set(spokeBl, {
-          x: updated.bl.x,
-          y: updated.bl.y,
-          scale: updated.bl.scale,
-        });
-        gsap.set(spokeTr, {
-          x: updated.tr.x,
-          y: updated.tr.y,
-          scale: updated.tr.scale,
-        });
       };
 
       window.addEventListener("resize", handleResize);
@@ -233,7 +231,7 @@ export function XeopsOpening() {
         window.removeEventListener("resize", handleResize);
       };
     },
-    { scope: stageRef, dependencies: [playCount], revertOnUpdate: true }
+    { scope: stageRef, dependencies: [router] }
   );
 
   return (
@@ -319,17 +317,6 @@ export function XeopsOpening() {
           </svg>
         </div>
       </div>
-
-      {/* Subtle corner control to replay the opening sequence while inspecting */}
-      <button
-        ref={replayBtnRef}
-        type="button"
-        onClick={() => setPlayCount((n) => n + 1)}
-        style={{ opacity: 0 }}
-        className="fixed right-[clamp(22px,4.2vw,60px)] bottom-[clamp(22px,4.2vh,52px)] z-20 cursor-pointer font-mono text-[11px] tracking-[0.24em] text-white/90 uppercase transition-opacity duration-300 hover:!opacity-100 focus-visible:!opacity-100 focus-visible:outline focus-visible:outline-1 focus-visible:outline-white/60"
-      >
-        Replay
-      </button>
     </main>
   );
 }
