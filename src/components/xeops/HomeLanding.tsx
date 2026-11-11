@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { XEOPS_WORDMARK } from "@/components/brand/xeops-paths";
 import { HERO_PILLARS } from "@/components/xeops/xeops-data";
-import { useXeopsModals } from "@/components/xeops/XeopsContext";
 import { HeroSculpture } from "@/components/xeops/HeroSculpture";
 import { ProductShowcaseTablet } from "@/components/xeops/ProductShowcaseTablet";
 import {
@@ -18,7 +17,6 @@ import {
   IconArrowRight,
   IconBolt,
   IconGrid,
-  IconPlay,
   IconShieldCheck,
   IconUsers,
 } from "@/components/xeops/XeopsIcons";
@@ -31,22 +29,15 @@ const PILLAR_ICONS = {
 } as const;
 
 export function HomeLanding() {
-  const { openGetStarted, openDemo } = useXeopsModals();
-
   return (
     <div className="w-full">
       {/* ── Hero Section ─────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-5 pt-12 pb-16 sm:px-8 sm:pt-20 sm:pb-24">
+      <section className="mx-auto max-w-6xl px-5 pt-10 pb-16 sm:px-8 sm:pt-14 sm:pb-24">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
-          <div className="flex flex-col items-start lg:col-span-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-[#141717]/85 px-3.5 py-1.5 text-xs font-medium text-[#A3AAAA] backdrop-blur-md">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#20C6C2] shadow-[0_0_8px_#20C6C2]" />
-              Introducing Xeops
-            </span>
-
+          <div className="flex flex-col items-center justify-center lg:col-span-6 lg:items-start lg:self-start lg:pt-10">
             <svg
               viewBox={XEOPS_WORDMARK.viewBox}
-              className="mt-5 h-auto w-[min(66vw,270px)] sm:w-[295px]"
+              className="h-auto w-[min(74vw,340px)] sm:w-[390px] lg:w-[420px]"
               role="img"
               aria-label="XEOPS"
             >
@@ -54,42 +45,22 @@ export function HomeLanding() {
                 <path
                   key={glyph.id}
                   d={glyph.d}
-                  fill="#F2F3F3"
+                  fill="#FFFFFF"
                   fillRule="evenodd"
                 />
               ))}
             </svg>
 
-            <h1 className="mt-4 text-5xl font-bold leading-[1.04] tracking-[-0.03em] text-[#F2F3F3] sm:text-6xl lg:text-[4.15rem]">
-              Dream. Build.
+            <h1 className="mt-6 text-center text-3xl font-bold leading-[1.12] tracking-[-0.025em] text-[#F2F3F3] sm:text-4xl lg:text-left lg:text-[2.65rem]">
+              Built on clarity.
               <br />
-              <span className="xeops-gradient-teal">Innovate.</span>
+              <span className="xeops-gradient-teal">Designed to last.</span>
             </h1>
 
-            <p className="mt-5 max-w-md text-base leading-relaxed text-[#A3AAAA] sm:text-[17px]">
-              A next-generation platform to turn your ideas into reality, faster
-              than ever.
+            <p className="mt-4 max-w-md text-center text-[15px] leading-relaxed text-[#A3AAAA] sm:text-base lg:text-left">
+              An independent company focused on disciplined engineering, honest
+              design, and work that earns trust over time.
             </p>
-
-            <div className="mt-7 flex flex-wrap items-center gap-4">
-              <button
-                type="button"
-                onClick={() => openGetStarted("pro")}
-                className="xeops-btn-primary px-6 py-3 text-sm"
-              >
-                Get Started
-                <IconArrowRight className="h-4 w-4" />
-              </button>
-
-              <button
-                type="button"
-                onClick={openDemo}
-                className="xeops-btn-secondary px-6 py-3 text-sm"
-              >
-                <IconPlay className="h-3.5 w-3.5 text-[#A3AAAA]" />
-                Watch Demo
-              </button>
-            </div>
           </div>
 
           <div className="lg:col-span-6">

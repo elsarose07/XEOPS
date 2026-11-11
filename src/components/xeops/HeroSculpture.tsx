@@ -129,34 +129,6 @@ export function HeroSculpture() {
         };
       };
 
-      // Precompute orbital ring points in 3D space around sculpture
-      const orbitSegs = 120;
-      const orbitPts: Array<{ sx: number; sy: number; depth: number }> = [];
-      for (let i = 0; i <= orbitSegs; i++) {
-        const a = (i / orbitSegs) * Math.PI * 2;
-        const raw: Vec3 = {
-          x: Math.cos(a) * 1.92,
-          y: Math.sin(a) * 0.72,
-          z: Math.sin(a) * 0.42,
-        };
-        const tilted = rotateXYZ(raw, 0.24 + smoothY * 0.08, smoothX * 0.08, -0.52);
-        orbitPts.push(project(tilted));
-      }
-
-      // Draw rear half of orbital ellipse first (positive depth = farther from camera)
-      ctx.lineWidth = 1;
-      for (let i = 0; i < orbitSegs; i++) {
-        const p0 = orbitPts[i];
-        const p1 = orbitPts[i + 1];
-        if ((p0.depth + p1.depth) * 0.5 >= 0) {
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.10)";
-          ctx.beginPath();
-          ctx.moveTo(p0.sx, p0.sy);
-          ctx.lineTo(p1.sx, p1.sy);
-          ctx.stroke();
-        }
-      }
-
       // Build parametric twisted closed ribbon grid
       const grid: Vec3[][] = [];
       for (let i = 0; i <= NU; i++) {
@@ -286,45 +258,6 @@ export function HeroSculpture() {
         ctx.fill();
         ctx.stroke();
       }
-
-      // Draw foreground half of orbital ring cleanly over rear occlusion (negative depth = nearer)
-      ctx.lineWidth = 1.05;
-      for (let i = 0; i < orbitSegs; i++) {
-        const p0 = orbitPts[i];
-        const p1 = orbitPts[i + 1];
-        if ((p0.depth + p1.depth) * 0.5 < 0) {
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
-          ctx.beginPath();
-          ctx.moveTo(p0.sx, p0.sy);
-          ctx.lineTo(p1.sx, p1.sy);
-          ctx.stroke();
-        }
-      }
-
-      // Two subtle glowing orbital nodes matching mockup (bottom-left teal, top-right amber)
-      const tealNodeIdx = Math.floor(orbitSegs * 0.58);
-      const amberNodeIdx = Math.floor(orbitSegs * 0.08);
-      const drawNode = (
-        pt: { sx: number; sy: number },
-        coreColor: string,
-        glowColor: string
-      ) => {
-        const grad = ctx.createRadialGradient(pt.sx, pt.sy, 0, pt.sx, pt.sy, 11);
-        grad.addColorStop(0, glowColor);
-        grad.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(pt.sx, pt.sy, 11, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = coreColor;
-        ctx.beginPath();
-        ctx.arc(pt.sx, pt.sy, 2.7, 0, Math.PI * 2);
-        ctx.fill();
-      };
-
-      drawNode(orbitPts[tealNodeIdx], "#65D9D0", "rgba(32, 198, 194, 0.65)");
-      drawNode(orbitPts[amberNodeIdx], "#E0B675", "rgba(196, 154, 88, 0.55)");
     };
 
     const handlePointerMove = (e: PointerEvent) => {
@@ -391,7 +324,7 @@ export function HeroSculpture() {
 
       <canvas
         ref={canvasRef}
-        aria-label="Abstract three-dimensional Xeops sculptural loop with orbital ring"
+        aria-label="Abstract three-dimensional Xeops sculptural loop"
         className="xeops-float-gentle relative z-10 h-full w-full cursor-grab active:cursor-grabbing"
       />
     </div>

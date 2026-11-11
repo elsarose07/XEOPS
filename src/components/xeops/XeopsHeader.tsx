@@ -13,6 +13,14 @@ import {
   XeopsMark,
 } from "@/components/xeops/XeopsIcons";
 
+function isNavLinkActive(pathname: string, href: string): boolean {
+  return (
+    pathname === href ||
+    (href !== "/home" && pathname.startsWith(href)) ||
+    (href === "/product" && pathname.startsWith("/features"))
+  );
+}
+
 export function XeopsHeader() {
   const pathname = usePathname();
   const { openGetStarted } = useXeopsModals();
@@ -48,9 +56,7 @@ export function XeopsHeader() {
           className="hidden items-center gap-8 md:flex"
         >
           {NAV_LINKS.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              (item.href !== "/home" && pathname.startsWith(item.href));
+            const isActive = isNavLinkActive(pathname, item.href);
 
             return (
               <Link
@@ -117,9 +123,7 @@ export function XeopsHeader() {
               className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-5"
             >
               {NAV_LINKS.map((item) => {
-                const isActive =
-                  pathname === item.href ||
-                  (item.href !== "/home" && pathname.startsWith(item.href));
+                const isActive = isNavLinkActive(pathname, item.href);
 
                 return (
                   <Link

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { NAV_LINKS } from "@/components/xeops/xeops-data";
+import { FOOTER_LINKS } from "@/components/xeops/xeops-data";
 import { useXeopsModals } from "@/components/xeops/XeopsContext";
 import {
   IconGithub,
@@ -38,7 +38,7 @@ export function XeopsFooter() {
             aria-label="Footer Navigation"
             className="flex flex-wrap items-center gap-x-7 gap-y-2.5"
           >
-            {NAV_LINKS.map((item) => (
+            {FOOTER_LINKS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}

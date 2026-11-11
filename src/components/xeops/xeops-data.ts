@@ -5,8 +5,14 @@ export interface NavLinkItem {
 
 export const NAV_LINKS: readonly NavLinkItem[] = [
   { label: "Home", href: "/home" },
-  { label: "About", href: "/about" },
-  { label: "Features", href: "/features" },
+  { label: "Product", href: "/product" },
+  { label: "About Us", href: "/about" },
+] as const;
+
+export const FOOTER_LINKS: readonly NavLinkItem[] = [
+  { label: "Home", href: "/home" },
+  { label: "Product", href: "/product" },
+  { label: "About Us", href: "/about" },
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
 ] as const;
