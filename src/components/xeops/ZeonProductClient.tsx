@@ -46,70 +46,68 @@ export function ZeonProductClient() {
     () => {
       const mm = gsap.matchMedia();
 
-      // ── Desktop Layout (>= 1024px): Orb moves to the right, Intro appears on the left
+      // ── Desktop Layout (>= 1024px): Fast, responsive, lag-free transition
       mm.add("(min-width: 1024px)", () => {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: 0.25,
             pin: pinTargetRef.current,
-            anticipatePin: 1,
           },
         });
 
-        // 1. Initial Hero Text floats upward and fades out
+        // 1. Initial Hero Text fades out quickly
         tl.to(
           heroContentRef.current,
           {
             opacity: 0,
-            y: -45,
-            duration: 0.3,
-            ease: "power1.out",
+            y: -30,
+            duration: 0.25,
+            ease: "power2.out",
             pointerEvents: "none",
           },
           0
         );
 
-        // 2. The Glossy Dark Glass Orb smoothly travels from center to the right & scales down slightly
+        // 2. The Glossy Dark Glass Orb travels briskly to the right & scales down
         tl.to(
           orbRef.current,
           {
             x: "24vw",
             y: "-18%",
             scale: 0.82,
-            duration: 0.95,
-            ease: "power1.inOut",
+            duration: 0.75,
+            ease: "power2.inOut",
           },
-          0.05
+          0
         );
 
-        // 3. 'MEET ZEON' Content glides into place on the left
+        // 3. 'MEET ZEON' Content glides in swiftly on the left
         tl.fromTo(
           introContentRef.current,
-          { opacity: 0, x: -40, pointerEvents: "none" },
+          { opacity: 0, x: -30, pointerEvents: "none" },
           {
             opacity: 1,
             x: 0,
             pointerEvents: "auto",
-            duration: 0.5,
+            duration: 0.45,
             ease: "power2.out",
           },
-          0.38
+          0.2
         );
       });
 
-      // ── Tablet / Mobile Layout (< 1024px): Orb shifts up and scales, Intro appears below
+      // ── Tablet / Mobile Layout (< 1024px): Fast vertical transition
       mm.add("(max-width: 1023px)", () => {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: 0.25,
             pin: pinTargetRef.current,
-            anticipatePin: 1,
           },
         });
 
@@ -117,9 +115,9 @@ export function ZeonProductClient() {
           heroContentRef.current,
           {
             opacity: 0,
-            y: -35,
-            duration: 0.3,
-            ease: "power1.out",
+            y: -25,
+            duration: 0.25,
+            ease: "power2.out",
             pointerEvents: "none",
           },
           0
@@ -130,23 +128,23 @@ export function ZeonProductClient() {
           {
             y: "-30%",
             scale: 0.65,
-            duration: 0.9,
-            ease: "power1.inOut",
+            duration: 0.75,
+            ease: "power2.inOut",
           },
-          0.05
+          0
         );
 
         tl.fromTo(
           introContentRef.current,
-          { opacity: 0, y: 30, pointerEvents: "none" },
+          { opacity: 0, y: 25, pointerEvents: "none" },
           {
             opacity: 1,
             y: 0,
             pointerEvents: "auto",
-            duration: 0.5,
+            duration: 0.45,
             ease: "power2.out",
           },
-          0.38
+          0.2
         );
       });
 
@@ -184,7 +182,7 @@ export function ZeonProductClient() {
       </div>
 
       {/* ── Pinned Scroll-Driven Transition Stage (Hero -> Meet Zeon) ──── */}
-      <div ref={containerRef} className="relative z-10 w-full h-[220vh]">
+      <div ref={containerRef} className="relative z-10 w-full h-[135vh]">
         <div
           ref={pinTargetRef}
           className="sticky top-0 flex h-[calc(100dvh-74px)] w-full flex-col justify-between overflow-hidden pt-6 sm:pt-8 pb-0"
@@ -266,24 +264,33 @@ export function ZeonProductClient() {
                 }}
               />
 
-              {/* Ambient Glow Aura behind the glass rim */}
+              {/* Ambient Glow Aura behind the glass rim (Hardware-accelerated) */}
               <div
-                className="pointer-events-none absolute -inset-6 rounded-full blur-2xl"
+                className="pointer-events-none absolute -inset-5 rounded-full"
                 style={{
                   background:
-                    "radial-gradient(circle, rgba(32, 198, 194, 0.22) 0%, rgba(101, 217, 208, 0.08) 40%, transparent 70%)",
+                    "radial-gradient(circle, rgba(32, 198, 194, 0.25) 0%, rgba(101, 217, 208, 0.08) 45%, transparent 70%)",
                 }}
               />
 
-              {/* Central White Zeon Logo */}
+              {/* Central Black Zeon Logo with Backlit Glass Core */}
               <div className="relative z-10 flex items-center justify-center transition-transform duration-300 hover:scale-105">
+                {/* Soft Backlight behind the black logo (Hardware-accelerated gradient) */}
+                <div
+                  className="pointer-events-none absolute h-36 w-36 sm:h-48 sm:w-48 rounded-full"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(101, 217, 208, 0.15) 45%, transparent 70%)",
+                  }}
+                />
+
                 <Image
-                  src="/zeon-logo-white.png"
+                  src="/zeon-logo.png"
                   alt="ZEON Logo"
                   width={240}
                   height={304}
                   priority
-                  className="h-28 w-auto object-contain sm:h-36 md:h-44 lg:h-48 drop-shadow-[0_0_16px_rgba(101,217,208,0.5)]"
+                  className="relative z-10 h-28 w-auto object-contain sm:h-36 md:h-44 lg:h-48 drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
                 />
               </div>
             </div>
