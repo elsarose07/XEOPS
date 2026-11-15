@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { FeaturesClient } from "@/components/xeops/FeaturesClient";
+import { ZeonProductClient } from "@/components/xeops/ZeonProductClient";
 
 export const metadata: Metadata = {
-  title: "Product — XEOPS",
+  title: "Zeon — XEOPS Product",
   description:
-    "Explore the Xeops platform surface, architecture capabilities, and native ecosystem integrations.",
+    "Explore Zeon, the autonomous edge orchestration and cloud infrastructure engine by Xeops.",
 };
 
 export default function ProductPage() {
-  return <FeaturesClient />;
+  return <ZeonProductClient />;
 }

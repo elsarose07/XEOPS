@@ -134,10 +134,10 @@ export function IntegrationsSection() {
         </div>
 
         <Link
-          href="/features#integrations"
+          href="/features"
           className="text-sm font-medium text-[#A3AAAA] transition-colors hover:text-[#65D9D0]"
         >
-          View full ecosystem →
+          Explore features →
         </Link>
       </div>
 
