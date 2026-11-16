@@ -1,28 +1,90 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
+import { AnimatePresence, motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useXeopsModals } from "@/components/xeops/XeopsContext";
 import { FinalCtaBanner } from "@/components/xeops/HomeSections";
-import {
-  IconArrowRight,
-} from "@/components/xeops/XeopsIcons";
+import { IconArrowRight } from "@/components/xeops/XeopsIcons";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
+type ProductId = "zeon" | "scopus";
+
+interface ProductConfig {
+  id: ProductId;
+  badge: string;
+  name: string;
+  heroDescription: string;
+  intro: {
+    badge: string;
+    headline: string;
+    description: string;
+    ctaText: string;
+  };
+}
+
+const PRODUCTS: Record<ProductId, ProductConfig> = {
+  zeon: {
+    id: "zeon",
+    badge: "PRODUCT 01",
+    name: "ZEON",
+    heroDescription:
+      "Explore Zeon, the autonomous edge orchestration engine engineered by Xeops. Built for microsecond dispatch, zero-trust cryptographic isolation, and resilient multi-cloud scale.",
+    intro: {
+      badge: "MEET ZEON",
+      headline: "Smart Warehouse Management, Simplified.",
+      description:
+        "Zeon is a modern warehouse management solution designed to simplify inventory, orders and business operations. Track inventory, manage orders and monitor your business with real-time insights.",
+      ctaText: "Discover Zeon",
+    },
+  },
+  scopus: {
+    id: "scopus",
+    badge: "PRODUCT 02",
+    name: "SCOPUS",
+    heroDescription:
+      "Explore Scopus, a smart educational document management platform engineered by Xeops. Organize academic documents, centralize study materials, and access resources seamlessly.",
+    intro: {
+      badge: "MEET SCOPUS",
+      headline: "Your Academic World, Organized.",
+      description:
+        "SCOPUS is a smart educational document management platform designed for college students. Organize your academic documents, keep your study materials in one place, and access important resources whenever you need them.",
+      ctaText: "Discover SCOPUS",
+    },
+  },
+};
+
 export function ZeonProductClient() {
   const { openGetStarted, openDemo } = useXeopsModals();
+
+  const [activeId, setActiveId] = useState<ProductId>("zeon");
+  const [direction, setDirection] = useState<number>(1);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const pinTargetRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const introContentRef = useRef<HTMLDivElement>(null);
   const orbRef = useRef<HTMLDivElement>(null);
+
+  const currentProduct = PRODUCTS[activeId];
+  const otherId: ProductId = activeId === "zeon" ? "scopus" : "zeon";
+  const otherProduct = PRODUCTS[otherId];
+
+  const selectProduct = (id: ProductId) => {
+    if (id === activeId) return;
+    setDirection(id === "scopus" ? 1 : -1);
+    setActiveId(id);
+  };
+
+  const toggleProduct = () => {
+    selectProduct(otherId);
+  };
 
   useGSAP(
     () => {
@@ -53,12 +115,12 @@ export function ZeonProductClient() {
           0
         );
 
-        // 2. The Zeon writing glides up and to the right into vertical alignment
+        // 2. The active brand writing glides up and to the right into vertical alignment
         tl.to(
           orbRef.current,
           {
             x: "24vw",
-            y: "-28vh",
+            y: "-20vh",
             scale: 0.88,
             duration: 0.75,
             ease: "power2.inOut",
@@ -66,7 +128,7 @@ export function ZeonProductClient() {
           0
         );
 
-        // 3. 'MEET ZEON' Content glides in swiftly on the left
+        // 3. 'MEET [PRODUCT]' Content glides in swiftly on the left
         tl.fromTo(
           introContentRef.current,
           { opacity: 0, x: -30, pointerEvents: "none" },
@@ -108,7 +170,7 @@ export function ZeonProductClient() {
         tl.to(
           orbRef.current,
           {
-            y: "-20vh",
+            y: "-14vh",
             scale: 0.75,
             duration: 0.75,
             ease: "power2.inOut",
@@ -163,7 +225,7 @@ export function ZeonProductClient() {
         <div className="absolute -top-32 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(32,198,194,0.12)_0%,rgba(10,25,30,0.05)_50%,transparent_75%)] blur-3xl" />
       </div>
 
-      {/* ── Pinned Scroll-Driven Transition Stage (Hero -> Meet Zeon) ──── */}
+      {/* ── Pinned Scroll-Driven Transition Stage (Hero -> Meet Product) ──── */}
       <div ref={containerRef} className="relative z-10 w-full h-[135vh]">
         <div
           ref={pinTargetRef}
@@ -174,20 +236,68 @@ export function ZeonProductClient() {
             ref={heroContentRef}
             className="mx-auto flex max-w-2xl flex-col items-center px-4 text-center will-change-transform"
           >
-            <p className="text-[10px] font-semibold uppercase tracking-[0.38em] text-[#20C6C2] sm:text-[11px]">
-              PRODUCT 01
-            </p>
-            <h1
-              className="mt-2 font-serif text-5xl font-light tracking-[0.24em] text-[#F4F6F6] sm:text-6xl md:text-7xl lg:text-[5.5rem] lg:leading-tight"
-              style={{
-                textShadow: "0 0 35px rgba(32, 198, 194, 0.4), 0 0 70px rgba(10, 30, 30, 0.8)",
-              }}
-            >
-              ZEON
-            </h1>
-            <p className="mt-2 max-w-lg text-xs leading-relaxed text-[#A3AAAA] sm:text-[13px] md:text-sm">
-              Explore Zeon, the autonomous edge orchestration engine engineered by Xeops. Built for microsecond dispatch, zero-trust cryptographic isolation, and resilient multi-cloud scale.
-            </p>
+            {/* Product Switcher Indicator Pill */}
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1 backdrop-blur-md">
+              <button
+                type="button"
+                onClick={() => selectProduct("zeon")}
+                className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase transition-all duration-300 ${
+                  activeId === "zeon"
+                    ? "bg-[#20C6C2]/20 text-[#65D9D0] shadow-[0_0_12px_rgba(32,198,194,0.35)]"
+                    : "text-[#737C7C] hover:text-[#F2F3F3]"
+                }`}
+              >
+                01 ZEON
+              </button>
+              <span className="text-white/20">•</span>
+              <button
+                type="button"
+                onClick={() => selectProduct("scopus")}
+                className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase transition-all duration-300 ${
+                  activeId === "scopus"
+                    ? "bg-[#20C6C2]/20 text-[#65D9D0] shadow-[0_0_12px_rgba(32,198,194,0.35)]"
+                    : "text-[#737C7C] hover:text-[#F2F3F3]"
+                }`}
+              >
+                02 SCOPUS
+              </button>
+            </div>
+
+            {/* Brand Title (Clean, arrow is moved to the second writing below) */}
+            <div className="relative mt-2 flex items-center justify-center">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.h1
+                  key={currentProduct.name}
+                  custom={direction}
+                  initial={{ opacity: 0, x: direction * 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -direction * 40 }}
+                  transition={{ duration: 0.35, ease: "easeInOut" }}
+                  className="font-serif text-5xl font-light tracking-[0.24em] text-[#F4F6F6] sm:text-6xl md:text-7xl lg:text-[5.5rem] lg:leading-tight"
+                  style={{
+                    textShadow: "0 0 35px rgba(32, 198, 194, 0.4), 0 0 70px rgba(10, 30, 30, 0.8)",
+                  }}
+                >
+                  {currentProduct.name}
+                </motion.h1>
+              </AnimatePresence>
+            </div>
+
+            {/* Dynamic Product Description */}
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.p
+                key={currentProduct.heroDescription}
+                custom={direction}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="mt-2 max-w-lg text-xs leading-relaxed text-[#A3AAAA] sm:text-[13px] md:text-sm min-h-[50px] sm:min-h-[44px]"
+              >
+                {currentProduct.heroDescription}
+              </motion.p>
+            </AnimatePresence>
+
             <div className="mt-3.5 flex items-center justify-center">
               <button
                 type="button"
@@ -199,52 +309,113 @@ export function ZeonProductClient() {
             </div>
           </div>
 
-          {/* Left Introduction Section: 'MEET ZEON' (Revealed on scroll) */}
+          {/* Left Introduction Section: 'MEET [PRODUCT]' (Revealed on scroll) */}
           <div
             ref={introContentRef}
             className="pointer-events-none absolute left-6 sm:left-12 lg:left-20 xl:left-28 top-1/2 -translate-y-1/2 z-30 max-w-lg opacity-0 will-change-transform"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#20C6C2]">
-              MEET ZEON
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#F2F3F3] sm:text-4xl lg:text-[2.65rem] lg:leading-[1.15]">
-              Smart Warehouse Management, Simplified.
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-[#A3AAAA] sm:text-[15px]">
-              Zeon is a modern warehouse management solution designed to simplify inventory, orders and business operations. Track inventory, manage orders and monitor your business with real-time insights.
-            </p>
-            <div className="mt-7">
-              <button
-                type="button"
-                onClick={openDemo}
-                className="xeops-btn-primary px-7 py-3 text-sm inline-flex items-center gap-2 shadow-[0_0_25px_rgba(32,198,194,0.35)]"
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={currentProduct.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
               >
-                Discover Zeon
-                <IconArrowRight className="h-4 w-4" />
-              </button>
-            </div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#20C6C2]">
+                  {currentProduct.intro.badge}
+                </p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#F2F3F3] sm:text-4xl lg:text-[2.65rem] lg:leading-[1.15]">
+                  {currentProduct.intro.headline}
+                </h2>
+                <p className="mt-4 text-sm leading-relaxed text-[#A3AAAA] sm:text-[15px]">
+                  {currentProduct.intro.description}
+                </p>
+                <div className="mt-7">
+                  <button
+                    type="button"
+                    onClick={openDemo}
+                    className="xeops-btn-primary px-7 py-3 text-sm inline-flex items-center gap-2 shadow-[0_0_25px_rgba(32,198,194,0.35)]"
+                  >
+                    {currentProduct.intro.ctaText}
+                    <IconArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {/* Central to Right Stage: Floating Zeon Cursive Script Writing (No Round Orb) */}
-          <div className="relative mt-auto flex flex-col items-center justify-end overflow-visible pb-12 sm:pb-16 lg:pb-20">
+          {/* Central to Right Stage: Floating Brand Writing / Mark (Zeon / Scopus) */}
+          <div className="relative mt-auto flex flex-col items-center justify-end overflow-visible pb-24 sm:pb-32 lg:pb-36">
             <div
               ref={orbRef}
-              className="relative flex flex-col items-center justify-center shrink-0 will-change-transform select-none"
+              className="relative flex items-center justify-center gap-6 sm:gap-10 lg:gap-14 shrink-0 will-change-transform select-none"
             >
-              {/* Subtle ambient back-glow aura highlighting the script calligraphy */}
+              {/* Subtle ambient back-glow aura highlighting the active mark */}
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute h-20 w-56 sm:h-24 sm:w-72 rounded-full bg-[#20C6C2]/15 blur-2xl"
               />
 
-              <Image
-                src="/zeon-script-white.png"
-                alt="Zeon"
-                width={494}
-                height={113}
-                priority
-                className="relative z-10 h-14 w-auto object-contain sm:h-20 md:h-24 lg:h-28 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_40px_rgba(32,198,194,0.3)] transition-transform duration-300 hover:scale-105"
-              />
+              <AnimatePresence mode="wait" custom={direction}>
+                {activeId === "zeon" ? (
+                  <motion.div
+                    key="zeon-writing"
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction * 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -direction * 50 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="flex items-center justify-center"
+                  >
+                    <Image
+                      src="/zeon-script-white.png"
+                      alt="Zeon"
+                      width={494}
+                      height={113}
+                      priority
+                      className="relative z-10 h-14 w-auto object-contain sm:h-20 md:h-24 lg:h-28 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_40px_rgba(32,198,194,0.3)] transition-transform duration-300 hover:scale-105"
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="scopus-writing"
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction * 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -direction * 50 }}
+                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                    className="flex flex-col items-center justify-center gap-2"
+                  >
+                    <Image
+                      src="/scopus-mark.png"
+                      alt="Scopus"
+                      width={335}
+                      height={435}
+                      priority
+                      className="relative z-10 h-16 w-auto object-contain sm:h-20 md:h-24 lg:h-28 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_40px_rgba(32,198,194,0.3)] transition-transform duration-300 hover:scale-105"
+                    />
+                    <span className="font-serif text-lg sm:text-xl lg:text-2xl font-light tracking-[0.34em] text-[#F4F6F6] drop-shadow-[0_0_20px_rgba(32,198,194,0.4)]">
+                      SCOPUS
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Arrow sign on the right side with generous distance from the writing */}
+              <button
+                type="button"
+                onClick={toggleProduct}
+                className="group relative z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.05] text-[#F2F3F3] shadow-[0_0_20px_rgba(32,198,194,0.25)] transition-all duration-300 hover:scale-110 hover:border-[#20C6C2] hover:bg-[#20C6C2]/15 active:scale-95 shrink-0"
+                aria-label={`Switch to ${otherProduct.name}`}
+                title={`Switch to ${otherProduct.name}`}
+              >
+                <IconArrowRight
+                  className={`h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 ${
+                    activeId === "scopus" ? "rotate-180 group-hover:-translate-x-0.5" : "group-hover:translate-x-0.5"
+                  }`}
+                />
+              </button>
             </div>
           </div>
         </div>

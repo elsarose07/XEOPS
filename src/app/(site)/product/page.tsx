@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { ZeonProductClient } from "@/components/xeops/ZeonProductClient";
 
 export const metadata: Metadata = {
-  title: "Zeon — XEOPS Product",
+  title: "Products — XEOPS | Zeon & Scopus",
   description:
-    "Explore Zeon, the autonomous edge orchestration and cloud infrastructure engine by Xeops.",
+    "Explore Zeon and Scopus: autonomous edge orchestration and smart academic document management by Xeops.",
 };
 
 export default function ProductPage() {
