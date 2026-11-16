@@ -9,22 +9,11 @@ import { useXeopsModals } from "@/components/xeops/XeopsContext";
 import { FinalCtaBanner } from "@/components/xeops/HomeSections";
 import {
   IconArrowRight,
-  IconBolt,
-  IconGrid,
-  IconShieldCheck,
-  IconUsers,
 } from "@/components/xeops/XeopsIcons";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
-
-const METRICS = [
-  { label: "Dispatch Latency", value: "< 12ms" },
-  { label: "Mesh Availability", value: "99.999%" },
-  { label: "Edge Clusters", value: "42+ Active" },
-  { label: "Egress Overhead", value: "Zero-Cost" },
-];
 
 export function ZeonProductClient() {
   const { openGetStarted, openDemo } = useXeopsModals();
@@ -34,13 +23,6 @@ export function ZeonProductClient() {
   const heroContentRef = useRef<HTMLDivElement>(null);
   const introContentRef = useRef<HTMLDivElement>(null);
   const orbRef = useRef<HTMLDivElement>(null);
-
-  const scrollToSpecs = () => {
-    const el = document.getElementById("zeon-specs");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   useGSAP(
     () => {
@@ -71,13 +53,13 @@ export function ZeonProductClient() {
           0
         );
 
-        // 2. The Glossy Dark Glass Orb travels briskly to the right & scales down
+        // 2. The Zeon writing glides up and to the right into vertical alignment
         tl.to(
           orbRef.current,
           {
             x: "24vw",
-            y: "-18%",
-            scale: 0.82,
+            y: "-28vh",
+            scale: 0.88,
             duration: 0.75,
             ease: "power2.inOut",
           },
@@ -126,8 +108,8 @@ export function ZeonProductClient() {
         tl.to(
           orbRef.current,
           {
-            y: "-30%",
-            scale: 0.65,
+            y: "-20vh",
+            scale: 0.75,
             duration: 0.75,
             ease: "power2.inOut",
           },
@@ -234,7 +216,7 @@ export function ZeonProductClient() {
             <div className="mt-7">
               <button
                 type="button"
-                onClick={scrollToSpecs}
+                onClick={openDemo}
                 className="xeops-btn-primary px-7 py-3 text-sm inline-flex items-center gap-2 shadow-[0_0_25px_rgba(32,198,194,0.35)]"
               >
                 Discover Zeon
@@ -243,147 +225,30 @@ export function ZeonProductClient() {
             </div>
           </div>
 
-          {/* Central to Right Stage: The Glossy Dark Glass ZEON Orb */}
-          <div className="relative mt-auto flex flex-col items-center justify-end overflow-visible pb-0">
+          {/* Central to Right Stage: Floating Zeon Cursive Script Writing (No Round Orb) */}
+          <div className="relative mt-auto flex flex-col items-center justify-end overflow-visible pb-12 sm:pb-16 lg:pb-20">
             <div
               ref={orbRef}
-              className="relative translate-y-[24%] flex h-[300px] w-[300px] flex-col items-center justify-center rounded-full border border-white/20 border-t-white/80 shrink-0 sm:h-[380px] sm:w-[380px] md:h-[440px] md:w-[440px] lg:h-[480px] lg:w-[480px] will-change-transform"
-              style={{
-                background:
-                  "radial-gradient(circle at 35% 25%, #182226 0%, #0F1619 35%, #080D0E 65%, #030506 100%)",
-                boxShadow:
-                  "0 0 50px rgba(32, 198, 194, 0.22), 0 0 100px rgba(32, 198, 194, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.75), inset 0 16px 40px rgba(101, 217, 208, 0.25), inset 0 -20px 45px rgba(0, 0, 0, 0.9)",
-              }}
+              className="relative flex flex-col items-center justify-center shrink-0 will-change-transform select-none"
             >
-              {/* Glass Specular Gloss Curve at upper-left */}
+              {/* Subtle ambient back-glow aura highlighting the script calligraphy */}
               <div
-                className="pointer-events-none absolute inset-0 rounded-full"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at 38% 22%, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 35%, transparent 65%)",
-                }}
+                aria-hidden="true"
+                className="pointer-events-none absolute h-20 w-56 sm:h-24 sm:w-72 rounded-full bg-[#20C6C2]/15 blur-2xl"
               />
 
-              {/* Ambient Glow Aura behind the glass rim (Hardware-accelerated) */}
-              <div
-                className="pointer-events-none absolute -inset-5 rounded-full"
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(32, 198, 194, 0.25) 0%, rgba(101, 217, 208, 0.08) 45%, transparent 70%)",
-                }}
+              <Image
+                src="/zeon-script-white.png"
+                alt="Zeon"
+                width={494}
+                height={113}
+                priority
+                className="relative z-10 h-14 w-auto object-contain sm:h-20 md:h-24 lg:h-28 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_40px_rgba(32,198,194,0.3)] transition-transform duration-300 hover:scale-105"
               />
-
-              {/* Central Black Zeon Logo with Backlit Glass Core */}
-              <div className="relative z-10 flex items-center justify-center transition-transform duration-300 hover:scale-105">
-                {/* Soft Backlight behind the black logo (Hardware-accelerated gradient) */}
-                <div
-                  className="pointer-events-none absolute h-36 w-36 sm:h-48 sm:w-48 rounded-full"
-                  style={{
-                    background:
-                      "radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(101, 217, 208, 0.15) 45%, transparent 70%)",
-                  }}
-                />
-
-                <Image
-                  src="/zeon-logo.png"
-                  alt="ZEON Logo"
-                  width={240}
-                  height={304}
-                  priority
-                  className="relative z-10 h-28 w-auto object-contain sm:h-36 md:h-44 lg:h-48 drop-shadow-[0_4px_20px_rgba(0,0,0,0.4)]"
-                />
-              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* ── Key Metrics Strip ────────────────────────────────────────── */}
-      <section className="relative z-20 border-y border-white/[0.08] bg-[#0A0D0D]/90 backdrop-blur-xl">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-5 py-8 sm:grid-cols-4 sm:px-8">
-          {METRICS.map((m) => (
-            <div key={m.label} className="text-center sm:text-left">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#737C7C]">
-                {m.label}
-              </p>
-              <p className="mt-1 font-mono text-xl font-bold tracking-tight text-[#F2F3F3] sm:text-2xl">
-                {m.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Technical Architecture & Deep Capabilities ────────────────── */}
-      <section id="zeon-specs" className="relative z-10 mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
-        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#20C6C2]">
-              Architectural Guarantees
-            </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#F2F3F3] sm:text-4xl">
-              Engineered for extreme reliability.
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={openDemo}
-            className="xeops-btn-secondary px-5 py-2.5 text-xs uppercase tracking-wider"
-          >
-            Launch Interactive Tour →
-          </button>
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <div className="xeops-card xeops-card-interactive p-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-[#20C6C2]/10 text-[#65D9D0]">
-              <IconBolt className="h-5 w-5" />
-            </div>
-            <h3 className="mt-5 text-base font-semibold text-[#F2F3F3]">
-              Compiled Edge Routing
-            </h3>
-            <p className="mt-2.5 text-xs leading-relaxed text-[#A3AAAA]">
-              Warm isolate pools guarantee microsecond dispatch without the cold-start overhead typical of traditional serverless runtimes.
-            </p>
-          </div>
-
-          <div className="xeops-card xeops-card-interactive p-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-[#20C6C2]/10 text-[#65D9D0]">
-              <IconShieldCheck className="h-5 w-5" />
-            </div>
-            <h3 className="mt-5 text-base font-semibold text-[#F2F3F3]">
-              Cryptographic Isolation
-            </h3>
-            <p className="mt-2.5 text-xs leading-relaxed text-[#A3AAAA]">
-              Every request executes within memory-safe sandboxes with hardware-rooted keys and continuous verification.
-            </p>
-          </div>
-
-          <div className="xeops-card xeops-card-interactive p-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-[#20C6C2]/10 text-[#65D9D0]">
-              <IconGrid className="h-5 w-5" />
-            </div>
-            <h3 className="mt-5 text-base font-semibold text-[#F2F3F3]">
-              Declarative Build Graph
-            </h3>
-            <p className="mt-2.5 text-xs leading-relaxed text-[#A3AAAA]">
-              Define pipeline workflows, rollback criteria, and regional failover strategies as deterministic code manifests.
-            </p>
-          </div>
-
-          <div className="xeops-card xeops-card-interactive p-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-[#20C6C2]/10 text-[#65D9D0]">
-              <IconUsers className="h-5 w-5" />
-            </div>
-            <h3 className="mt-5 text-base font-semibold text-[#F2F3F3]">
-              Autonomous Consensus
-            </h3>
-            <p className="mt-2.5 text-xs leading-relaxed text-[#A3AAAA]">
-              Distributed nodes coordinate state replication and automated traffic failover without centralized control bottlenecks.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* ── Final Conversion Banner ─────────────────────────────────── */}
       <FinalCtaBanner />
