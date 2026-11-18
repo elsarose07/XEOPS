@@ -246,9 +246,9 @@ export function ZeonProductClient() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -direction * 40 }}
                   transition={{ duration: 0.35, ease: "easeInOut" }}
-                  className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-[5.5rem] font-light tracking-[0.16em] sm:tracking-[0.24em] text-[#F4F6F6] lg:leading-tight whitespace-nowrap"
+                  className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[3.25rem] font-light tracking-[0.14em] sm:tracking-[0.2em] text-[#F4F6F6] lg:leading-tight whitespace-nowrap"
                   style={{
-                    textShadow: "0 0 35px rgba(32, 198, 194, 0.4), 0 0 70px rgba(10, 30, 30, 0.8)",
+                    textShadow: "0 0 25px rgba(32, 198, 194, 0.35), 0 0 50px rgba(10, 30, 30, 0.7)",
                   }}
                 >
                   {currentProduct.name}
