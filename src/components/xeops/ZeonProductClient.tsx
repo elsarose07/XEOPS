@@ -33,7 +33,7 @@ const PRODUCTS: Record<ProductId, ProductConfig> = {
   zeon: {
     id: "zeon",
     badge: "PRODUCT 01",
-    name: "ZEON",
+    name: "PRODUCT 1",
     heroDescription:
       "Explore Zeon, the autonomous edge orchestration engine engineered by Xeops. Built for microsecond dispatch, zero-trust cryptographic isolation, and resilient multi-cloud scale.",
     intro: {
@@ -47,7 +47,7 @@ const PRODUCTS: Record<ProductId, ProductConfig> = {
   scopus: {
     id: "scopus",
     badge: "PRODUCT 02",
-    name: "SCOPUS",
+    name: "PRODUCT 2",
     heroDescription:
       "Explore Scopus, a smart educational document management platform engineered by Xeops. Organize academic documents, centralize study materials, and access resources seamlessly.",
     intro: {
@@ -246,7 +246,7 @@ export function ZeonProductClient() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -direction * 40 }}
                   transition={{ duration: 0.35, ease: "easeInOut" }}
-                  className="font-serif text-5xl font-light tracking-[0.24em] text-[#F4F6F6] sm:text-6xl md:text-7xl lg:text-[5.5rem] lg:leading-tight"
+                  className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-[5.5rem] font-light tracking-[0.16em] sm:tracking-[0.24em] text-[#F4F6F6] lg:leading-tight whitespace-nowrap"
                   style={{
                     textShadow: "0 0 35px rgba(32, 198, 194, 0.4), 0 0 70px rgba(10, 30, 30, 0.8)",
                   }}
