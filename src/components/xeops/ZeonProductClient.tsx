@@ -236,33 +236,6 @@ export function ZeonProductClient() {
             ref={heroContentRef}
             className="mx-auto flex max-w-2xl flex-col items-center px-4 text-center will-change-transform"
           >
-            {/* Product Switcher Indicator Pill */}
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1 backdrop-blur-md">
-              <button
-                type="button"
-                onClick={() => selectProduct("zeon")}
-                className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-                  activeId === "zeon"
-                    ? "bg-[#20C6C2]/20 text-[#65D9D0] shadow-[0_0_12px_rgba(32,198,194,0.35)]"
-                    : "text-[#737C7C] hover:text-[#F2F3F3]"
-                }`}
-              >
-                01 ZEON
-              </button>
-              <span className="text-white/20">•</span>
-              <button
-                type="button"
-                onClick={() => selectProduct("scopus")}
-                className={`rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-                  activeId === "scopus"
-                    ? "bg-[#20C6C2]/20 text-[#65D9D0] shadow-[0_0_12px_rgba(32,198,194,0.35)]"
-                    : "text-[#737C7C] hover:text-[#F2F3F3]"
-                }`}
-              >
-                02 SCOPUS
-              </button>
-            </div>
-
             {/* Brand Title (Clean, arrow is moved to the second writing below) */}
             <div className="relative mt-2 flex items-center justify-center">
               <AnimatePresence mode="wait" custom={direction}>
