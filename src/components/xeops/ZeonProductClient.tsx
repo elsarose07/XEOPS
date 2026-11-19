@@ -408,40 +408,70 @@ export function ZeonProductClient() {
             </div>
           </div>
 
-          {/* Left Introduction Section: 'MEET [PRODUCT]' (Revealed on scroll) */}
+          {/* Left Introduction Section: Zeon & Scopus (Revealed on scroll) */}
           <div
             ref={introContentRef}
-            className="pointer-events-none absolute left-6 sm:left-12 lg:left-20 xl:left-28 top-1/2 -translate-y-1/2 z-30 max-w-lg opacity-0 will-change-transform"
+            className="pointer-events-none absolute left-6 sm:left-10 lg:left-16 xl:left-24 top-1/2 -translate-y-1/2 z-30 max-w-lg opacity-0 will-change-transform max-h-[calc(100dvh-100px)] overflow-y-auto"
           >
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={currentProduct.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#20C6C2]">
-                  {currentProduct.intro.badge}
+            <div className="flex flex-col gap-4 sm:gap-5 py-2">
+              {/* ── Zeon About Block ── */}
+              <div>
+                <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.26em] text-[#20C6C2]">
+                  {PRODUCTS.zeon.intro.badge}
                 </p>
-                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#F2F3F3] sm:text-4xl lg:text-[2.65rem] lg:leading-[1.15]">
-                  {currentProduct.intro.headline}
+                <h2 className="mt-1.5 text-xl sm:text-2xl lg:text-[1.85rem] font-bold tracking-tight text-[#F2F3F3] leading-[1.2]">
+                  {PRODUCTS.zeon.intro.headline}
                 </h2>
-                <p className="mt-4 text-sm leading-relaxed text-[#A3AAAA] sm:text-[15px]">
-                  {currentProduct.intro.description}
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#A3AAAA]">
+                  {PRODUCTS.zeon.intro.description}
                 </p>
-                <div className="mt-7">
+                <div className="mt-3.5">
                   <button
                     type="button"
-                    onClick={openDemo}
-                    className="xeops-btn-primary px-7 py-3 text-sm inline-flex items-center gap-2 shadow-[0_0_25px_rgba(32,198,194,0.35)]"
+                    onClick={() => {
+                      selectProduct("zeon");
+                      openDemo();
+                    }}
+                    className="xeops-btn-primary px-5 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm inline-flex items-center gap-2 shadow-[0_0_20px_rgba(32,198,194,0.3)]"
                   >
-                    {currentProduct.intro.ctaText}
-                    <IconArrowRight className="h-4 w-4" />
+                    {PRODUCTS.zeon.intro.ctaText}
+                    <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </button>
                 </div>
-              </motion.div>
-            </AnimatePresence>
+              </div>
+
+              {/* Line separating both */}
+              <div
+                role="separator"
+                className="w-full border-t border-white/[0.12] my-1 sm:my-2"
+              />
+
+              {/* ── Scopus About Block ── */}
+              <div>
+                <p className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.26em] text-[#20C6C2]">
+                  {PRODUCTS.scopus.intro.badge}
+                </p>
+                <h2 className="mt-1.5 text-xl sm:text-2xl lg:text-[1.85rem] font-bold tracking-tight text-[#F2F3F3] leading-[1.2]">
+                  {PRODUCTS.scopus.intro.headline}
+                </h2>
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#A3AAAA]">
+                  {PRODUCTS.scopus.intro.description}
+                </p>
+                <div className="mt-3.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      selectProduct("scopus");
+                      openDemo();
+                    }}
+                    className="xeops-btn-primary px-5 py-2 sm:px-6 sm:py-2.5 text-xs sm:text-sm inline-flex items-center gap-2 shadow-[0_0_20px_rgba(32,198,194,0.3)]"
+                  >
+                    {PRODUCTS.scopus.intro.ctaText}
+                    <IconArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Central to Right Stage: Floating Brand Writing / Mark (Zeon / Scopus) */}
