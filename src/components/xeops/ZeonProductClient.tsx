@@ -74,18 +74,21 @@ export function ZeonProductClient() {
   const otherId: ProductId = activeId === "zeon" ? "scopus" : "zeon";
   const otherProduct = PRODUCTS[otherId];
 
-  const selectProduct = useCallback(
-    (id: ProductId) => {
-      if (id === activeId) return;
+  const selectProduct = useCallback((id: ProductId) => {
+    setActiveId((prev) => {
+      if (prev === id) return prev;
       setDirection(id === "scopus" ? 1 : -1);
-      setActiveId(id);
-    },
-    [activeId]
-  );
+      return id;
+    });
+  }, []);
 
-  const toggleProduct = () => {
-    selectProduct(otherId);
-  };
+  const toggleProduct = useCallback(() => {
+    setActiveId((prev) => {
+      const next: ProductId = prev === "zeon" ? "scopus" : "zeon";
+      setDirection(next === "scopus" ? 1 : -1);
+      return next;
+    });
+  }, []);
 
   // ── Swipe & Horizontal Scroll Navigation ──────────────────────────
   useEffect(() => {
@@ -94,11 +97,11 @@ export function ZeonProductClient() {
 
     let touchStartX = 0;
     let touchStartY = 0;
-    let pointerStartX = 0;
-    let pointerStartY = 0;
-    let isPointerDown = false;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
     let lastWheelTime = 0;
-    const WHEEL_COOLDOWN = 500; // ms to avoid duplicate triggers on momentum scroll
+    const WHEEL_COOLDOWN = 350; // ms to avoid duplicate triggers on momentum scroll
 
     // 1. Touch Gestures (Mobile & Tablet Swipe)
     const handleTouchStart = (e: TouchEvent) => {
@@ -112,8 +115,8 @@ export function ZeonProductClient() {
       const diffX = e.changedTouches[0].clientX - touchStartX;
       const diffY = e.changedTouches[0].clientY - touchStartY;
 
-      // Only trigger when horizontal motion dominates vertical scrolling
-      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+      // Responsive threshold with horizontal angle dominance
+      if (Math.abs(diffX) > 25 && Math.abs(diffX) > Math.abs(diffY)) {
         if (diffX < 0) {
           // Swiped left -> Scopus comes
           selectProduct("scopus");
@@ -127,18 +130,34 @@ export function ZeonProductClient() {
     // 2. Mouse / Pointer Drag (Desktop Click & Drag)
     const handlePointerDown = (e: PointerEvent) => {
       if ((e.target as HTMLElement)?.closest("button, a, input, textarea")) return;
-      isPointerDown = true;
-      pointerStartX = e.clientX;
-      pointerStartY = e.clientY;
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDragging) return;
+      const diffX = e.clientX - dragStartX;
+      const diffY = e.clientY - dragStartY;
+
+      // Quick-trigger once drag threshold reached
+      if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
+        isDragging = false;
+        if (diffX < 0) {
+          selectProduct("scopus");
+        } else {
+          selectProduct("zeon");
+        }
+      }
     };
 
     const handlePointerUp = (e: PointerEvent) => {
-      if (!isPointerDown) return;
-      isPointerDown = false;
-      const diffX = e.clientX - pointerStartX;
-      const diffY = e.clientY - pointerStartY;
+      if (!isDragging) return;
+      isDragging = false;
+      const diffX = e.clientX - dragStartX;
+      const diffY = e.clientY - dragStartY;
 
-      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+      if (Math.abs(diffX) > 25 && Math.abs(diffX) > Math.abs(diffY)) {
         if (diffX < 0) {
           selectProduct("scopus");
         } else {
@@ -148,21 +167,25 @@ export function ZeonProductClient() {
     };
 
     const handlePointerCancel = () => {
-      isPointerDown = false;
+      isDragging = false;
     };
 
     // 3. Wheel Gestures (Trackpad / Horizontal Mouse Scroll)
     const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaX) > 25 && Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.5) {
+      const isHorizontal = Math.abs(e.deltaX) > 12 && Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      const isShiftWheel = e.shiftKey && Math.abs(e.deltaY) > 12;
+
+      if (isHorizontal || isShiftWheel) {
+        const delta = isShiftWheel ? e.deltaY : e.deltaX;
         const now = Date.now();
         if (now - lastWheelTime < WHEEL_COOLDOWN) return;
         lastWheelTime = now;
 
-        if (e.deltaX > 0) {
-          // Scrolled left (fingers moving left) -> Scopus comes
+        if (delta > 0) {
+          // Scroll left gesture -> Scopus comes
           selectProduct("scopus");
         } else {
-          // Scrolled right (fingers moving right) -> Zeon comes
+          // Scroll right gesture -> Zeon comes
           selectProduct("zeon");
         }
       }
@@ -179,8 +202,9 @@ export function ZeonProductClient() {
     };
 
     el.addEventListener("touchstart", handleTouchStart, { passive: true });
-    el.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
     el.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
     window.addEventListener("pointerup", handlePointerUp);
     window.addEventListener("pointercancel", handlePointerCancel);
     el.addEventListener("wheel", handleWheel, { passive: true });
@@ -188,8 +212,9 @@ export function ZeonProductClient() {
 
     return () => {
       el.removeEventListener("touchstart", handleTouchStart);
-      el.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchend", handleTouchEnd);
       el.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointercancel", handlePointerCancel);
       el.removeEventListener("wheel", handleWheel);
@@ -337,10 +362,15 @@ export function ZeonProductClient() {
       </div>
 
       {/* ── Pinned Scroll-Driven Transition Stage (Hero -> Meet Product) ──── */}
-      <div ref={containerRef} className="relative z-10 w-full h-[135vh]">
+      <div
+        ref={containerRef}
+        style={{ overscrollBehaviorX: "none" }}
+        className="relative z-10 w-full h-[135vh]"
+      >
         <div
           ref={pinTargetRef}
-          className="sticky top-0 flex h-[calc(100dvh-74px)] w-full flex-col justify-between overflow-hidden pt-6 sm:pt-8 pb-0 touch-pan-y select-none"
+          style={{ overscrollBehaviorX: "none", touchAction: "pan-y" }}
+          className="sticky top-0 flex h-[calc(100dvh-74px)] w-full flex-col justify-between overflow-hidden pt-6 sm:pt-8 pb-0 select-none cursor-grab active:cursor-grabbing"
         >
           {/* Initial Hero Typography (Centered at top) */}
           <div
