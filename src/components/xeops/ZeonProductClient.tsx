@@ -21,7 +21,6 @@ interface ProductConfig {
   badge: string;
   name: string;
   displayName: string;
-  heroDescription: string;
   intro: {
     badge: string;
     headline: string;
@@ -36,8 +35,6 @@ const PRODUCTS: Record<ProductId, ProductConfig> = {
     badge: "PRODUCT 01",
     displayName: "Zeon",
     name: "MEET OUR LATEST INNOVATION — Introducing zeon by Xeops.",
-    heroDescription:
-      "Explore Zeon, the autonomous edge orchestration engine engineered by Xeops. Built for microsecond dispatch, zero-trust cryptographic isolation, and resilient multi-cloud scale.",
     intro: {
       badge: "MEET ZEON",
       headline: "Smart Warehouse Management, Simplified.",
@@ -51,8 +48,6 @@ const PRODUCTS: Record<ProductId, ProductConfig> = {
     badge: "PRODUCT 02",
     displayName: "Scopus",
     name: "INTRODUCING SCOPUS — Bringing all your learning resources together.",
-    heroDescription:
-      "Explore Scopus, a smart educational document management platform engineered by Xeops. Organize academic documents, centralize study materials, and access resources seamlessly.",
     intro: {
       badge: "MEET SCOPUS",
       headline: "Your Academic World, Organized.",
@@ -259,22 +254,7 @@ export function ZeonProductClient() {
               </AnimatePresence>
             </div>
 
-            {/* Dynamic Product Description */}
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.p
-                key={currentProduct.heroDescription}
-                custom={direction}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="mt-2 max-w-lg text-xs leading-relaxed text-[#A3AAAA] sm:text-[13px] md:text-sm min-h-[50px] sm:min-h-[44px]"
-              >
-                {currentProduct.heroDescription}
-              </motion.p>
-            </AnimatePresence>
-
-            <div className="mt-3.5 flex items-center justify-center">
+            <div className="mt-4 sm:mt-5 flex items-center justify-center">
               <button
                 type="button"
                 onClick={() => openGetStarted("pro")}
