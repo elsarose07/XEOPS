@@ -20,6 +20,7 @@ interface ProductConfig {
   id: ProductId;
   badge: string;
   name: string;
+  displayName: string;
   heroDescription: string;
   intro: {
     badge: string;
@@ -33,7 +34,8 @@ const PRODUCTS: Record<ProductId, ProductConfig> = {
   zeon: {
     id: "zeon",
     badge: "PRODUCT 01",
-    name: "PRODUCT 1",
+    displayName: "Zeon",
+    name: "MEET OUR LATEST INNOVATION — Introducing zeon by Xeops.",
     heroDescription:
       "Explore Zeon, the autonomous edge orchestration engine engineered by Xeops. Built for microsecond dispatch, zero-trust cryptographic isolation, and resilient multi-cloud scale.",
     intro: {
@@ -47,7 +49,8 @@ const PRODUCTS: Record<ProductId, ProductConfig> = {
   scopus: {
     id: "scopus",
     badge: "PRODUCT 02",
-    name: "PRODUCT 2",
+    displayName: "Scopus",
+    name: "INTRODUCING SCOPUS — Bringing all your learning resources together.",
     heroDescription:
       "Explore Scopus, a smart educational document management platform engineered by Xeops. Organize academic documents, centralize study materials, and access resources seamlessly.",
     intro: {
@@ -246,7 +249,7 @@ export function ZeonProductClient() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -direction * 40 }}
                   transition={{ duration: 0.35, ease: "easeInOut" }}
-                  className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[3.25rem] font-light tracking-[0.14em] sm:tracking-[0.2em] text-[#F4F6F6] lg:leading-tight whitespace-nowrap"
+                  className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-[2.25rem] font-light tracking-[0.05em] sm:tracking-[0.08em] text-[#F4F6F6] leading-snug sm:leading-tight max-w-xl text-center"
                   style={{
                     textShadow: "0 0 25px rgba(32, 198, 194, 0.35), 0 0 50px rgba(10, 30, 30, 0.7)",
                   }}
@@ -380,8 +383,8 @@ export function ZeonProductClient() {
                 type="button"
                 onClick={toggleProduct}
                 className="group relative z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.05] text-[#F2F3F3] shadow-[0_0_20px_rgba(32,198,194,0.25)] transition-all duration-300 hover:scale-110 hover:border-[#20C6C2] hover:bg-[#20C6C2]/15 active:scale-95 shrink-0"
-                aria-label={`Switch to ${otherProduct.name}`}
-                title={`Switch to ${otherProduct.name}`}
+                aria-label={`Switch to ${otherProduct.displayName}`}
+                title={`Switch to ${otherProduct.displayName}`}
               >
                 <IconArrowRight
                   className={`h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 ${
