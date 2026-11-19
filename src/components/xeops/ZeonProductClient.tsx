@@ -305,13 +305,28 @@ export function ZeonProductClient() {
           <div className="relative mt-auto flex flex-col items-center justify-end overflow-visible pb-24 sm:pb-32 lg:pb-36">
             <div
               ref={orbRef}
-              className="relative flex items-center justify-center gap-6 sm:gap-10 lg:gap-14 shrink-0 will-change-transform select-none"
+              className="relative flex items-center justify-center shrink-0 will-change-transform select-none"
             >
               {/* Subtle ambient back-glow aura highlighting the active mark */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute h-20 w-56 sm:h-24 sm:w-72 rounded-full bg-[#20C6C2]/15 blur-2xl"
+                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-20 w-56 sm:h-24 sm:w-72 rounded-full bg-[#20C6C2]/15 blur-2xl"
               />
+
+              {/* Arrow sign on the left side with generous distance from the centered writing */}
+              <button
+                type="button"
+                onClick={toggleProduct}
+                className="group absolute right-[calc(100%+0.625rem)] sm:right-[calc(100%+2rem)] lg:right-[calc(100%+3.5rem)] top-1/2 -translate-y-1/2 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.05] text-[#F2F3F3] shadow-[0_0_20px_rgba(32,198,194,0.25)] transition-all duration-300 hover:scale-110 hover:border-[#20C6C2] hover:bg-[#20C6C2]/15 active:scale-95 shrink-0"
+                aria-label={`Switch to ${otherProduct.displayName}`}
+                title={`Switch to ${otherProduct.displayName}`}
+              >
+                <IconArrowRight
+                  className={`h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 ${
+                    activeId === "scopus" ? "rotate-180 group-hover:-translate-x-0.5" : "group-hover:translate-x-0.5"
+                  }`}
+                />
+              </button>
 
               <AnimatePresence mode="wait" custom={direction}>
                 {activeId === "zeon" ? (
@@ -322,7 +337,7 @@ export function ZeonProductClient() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -direction * 50 }}
                     transition={{ duration: 0.35, ease: "easeInOut" }}
-                    className="flex items-center justify-center"
+                    className="flex items-center justify-center text-center"
                   >
                     <Image
                       src="/zeon-script-white.png"
@@ -341,7 +356,7 @@ export function ZeonProductClient() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -direction * 50 }}
                     transition={{ duration: 0.35, ease: "easeInOut" }}
-                    className="flex flex-col items-center justify-center gap-2"
+                    className="flex flex-col items-center justify-center gap-2 text-center"
                   >
                     <Image
                       src="/scopus-mark.png"
@@ -351,27 +366,12 @@ export function ZeonProductClient() {
                       priority
                       className="relative z-10 h-16 w-auto object-contain sm:h-20 md:h-24 lg:h-28 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_40px_rgba(32,198,194,0.3)] transition-transform duration-300 hover:scale-105"
                     />
-                    <span className="font-serif text-lg sm:text-xl lg:text-2xl font-light tracking-[0.34em] text-[#F4F6F6] drop-shadow-[0_0_20px_rgba(32,198,194,0.4)]">
+                    <span className="font-serif text-lg sm:text-xl lg:text-2xl font-light tracking-[0.34em] text-[#F4F6F6] drop-shadow-[0_0_20px_rgba(32,198,194,0.4)] text-center pl-[0.34em]">
                       SCOPUS
                     </span>
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* Arrow sign on the right side with generous distance from the writing */}
-              <button
-                type="button"
-                onClick={toggleProduct}
-                className="group relative z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/20 bg-white/[0.05] text-[#F2F3F3] shadow-[0_0_20px_rgba(32,198,194,0.25)] transition-all duration-300 hover:scale-110 hover:border-[#20C6C2] hover:bg-[#20C6C2]/15 active:scale-95 shrink-0"
-                aria-label={`Switch to ${otherProduct.displayName}`}
-                title={`Switch to ${otherProduct.displayName}`}
-              >
-                <IconArrowRight
-                  className={`h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 ${
-                    activeId === "scopus" ? "rotate-180 group-hover:-translate-x-0.5" : "group-hover:translate-x-0.5"
-                  }`}
-                />
-              </button>
             </div>
           </div>
         </div>
