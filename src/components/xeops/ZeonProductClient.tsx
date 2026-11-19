@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import gsap from "gsap";
@@ -74,15 +74,128 @@ export function ZeonProductClient() {
   const otherId: ProductId = activeId === "zeon" ? "scopus" : "zeon";
   const otherProduct = PRODUCTS[otherId];
 
-  const selectProduct = (id: ProductId) => {
-    if (id === activeId) return;
-    setDirection(id === "scopus" ? 1 : -1);
-    setActiveId(id);
-  };
+  const selectProduct = useCallback(
+    (id: ProductId) => {
+      if (id === activeId) return;
+      setDirection(id === "scopus" ? 1 : -1);
+      setActiveId(id);
+    },
+    [activeId]
+  );
 
   const toggleProduct = () => {
     selectProduct(otherId);
   };
+
+  // ── Swipe & Horizontal Scroll Navigation ──────────────────────────
+  useEffect(() => {
+    const el = pinTargetRef.current;
+    if (!el) return;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let isPointerDown = false;
+    let lastWheelTime = 0;
+    const WHEEL_COOLDOWN = 500; // ms to avoid duplicate triggers on momentum scroll
+
+    // 1. Touch Gestures (Mobile & Tablet Swipe)
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (e.changedTouches.length === 0) return;
+      const diffX = e.changedTouches[0].clientX - touchStartX;
+      const diffY = e.changedTouches[0].clientY - touchStartY;
+
+      // Only trigger when horizontal motion dominates vertical scrolling
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+        if (diffX < 0) {
+          // Swiped left -> Scopus comes
+          selectProduct("scopus");
+        } else {
+          // Swiped right -> Zeon comes
+          selectProduct("zeon");
+        }
+      }
+    };
+
+    // 2. Mouse / Pointer Drag (Desktop Click & Drag)
+    const handlePointerDown = (e: PointerEvent) => {
+      if ((e.target as HTMLElement)?.closest("button, a, input, textarea")) return;
+      isPointerDown = true;
+      pointerStartX = e.clientX;
+      pointerStartY = e.clientY;
+    };
+
+    const handlePointerUp = (e: PointerEvent) => {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+      const diffX = e.clientX - pointerStartX;
+      const diffY = e.clientY - pointerStartY;
+
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+        if (diffX < 0) {
+          selectProduct("scopus");
+        } else {
+          selectProduct("zeon");
+        }
+      }
+    };
+
+    const handlePointerCancel = () => {
+      isPointerDown = false;
+    };
+
+    // 3. Wheel Gestures (Trackpad / Horizontal Mouse Scroll)
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) > 25 && Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.5) {
+        const now = Date.now();
+        if (now - lastWheelTime < WHEEL_COOLDOWN) return;
+        lastWheelTime = now;
+
+        if (e.deltaX > 0) {
+          // Scrolled left (fingers moving left) -> Scopus comes
+          selectProduct("scopus");
+        } else {
+          // Scrolled right (fingers moving right) -> Zeon comes
+          selectProduct("zeon");
+        }
+      }
+    };
+
+    // 4. Keyboard Navigation (Left / Right Arrow Keys)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement)?.closest("input, textarea, select")) return;
+      if (e.key === "ArrowLeft") {
+        selectProduct("zeon");
+      } else if (e.key === "ArrowRight") {
+        selectProduct("scopus");
+      }
+    };
+
+    el.addEventListener("touchstart", handleTouchStart, { passive: true });
+    el.addEventListener("touchend", handleTouchEnd, { passive: true });
+    el.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerCancel);
+    el.addEventListener("wheel", handleWheel, { passive: true });
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      el.removeEventListener("touchstart", handleTouchStart);
+      el.removeEventListener("touchend", handleTouchEnd);
+      el.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerCancel);
+      el.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectProduct]);
 
   useGSAP(
     () => {
@@ -227,7 +340,7 @@ export function ZeonProductClient() {
       <div ref={containerRef} className="relative z-10 w-full h-[135vh]">
         <div
           ref={pinTargetRef}
-          className="sticky top-0 flex h-[calc(100dvh-74px)] w-full flex-col justify-between overflow-hidden pt-6 sm:pt-8 pb-0"
+          className="sticky top-0 flex h-[calc(100dvh-74px)] w-full flex-col justify-between overflow-hidden pt-6 sm:pt-8 pb-0 touch-pan-y select-none"
         >
           {/* Initial Hero Typography (Centered at top) */}
           <div
@@ -345,6 +458,7 @@ export function ZeonProductClient() {
                       width={494}
                       height={113}
                       priority
+                      draggable={false}
                       className="relative z-10 h-14 w-auto object-contain sm:h-20 md:h-24 lg:h-28 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_40px_rgba(32,198,194,0.3)] transition-transform duration-300 hover:scale-105"
                     />
                   </motion.div>
@@ -364,6 +478,7 @@ export function ZeonProductClient() {
                       width={335}
                       height={435}
                       priority
+                      draggable={false}
                       className="relative z-10 h-16 w-auto object-contain sm:h-20 md:h-24 lg:h-28 drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] drop-shadow-[0_0_40px_rgba(32,198,194,0.3)] transition-transform duration-300 hover:scale-105"
                     />
                     <span className="font-serif text-lg sm:text-xl lg:text-2xl font-light tracking-[0.34em] text-[#F4F6F6] drop-shadow-[0_0_20px_rgba(32,198,194,0.4)] text-center pl-[0.34em]">
